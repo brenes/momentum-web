@@ -1,0 +1,7 @@
+.bundle
+.rvmrc*
+Gemfile.lock
+*.swp
+config/database.yml
+log/*.log
+tmp/**/*

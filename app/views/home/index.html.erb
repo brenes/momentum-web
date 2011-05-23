@@ -1,0 +1,8 @@
+<%= @period_report.time %>
+
+<ul>
+<% @period_report.sorted_users[0, 10].each do |u| -%>
+<% user = User.find_by_username  u["username"] %>
+  <li><img src="<%= user.profile_image_url%>"/><a href="http://www.twitter.com/<%= u["username"] %>"><%= u["username"] %></a>: <%= u["report"]["mentions"] %> menciones </li>
+<% end -%>
+</ul>

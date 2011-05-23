@@ -1,6 +1,6 @@
 class PeriodReport < CouchRest::Model::Base
 
-	use_database CouchRest.new("http://localhost:5984").database("period_reports")
+	use_database CouchRest.new("http://#{COUCHDB_CONFIG["host"]}:#{COUCHDB_CONFIG["port"]}").database("period_reports")
 
 	property :time
 	property :mentions, Integer, :default => 0

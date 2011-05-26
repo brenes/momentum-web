@@ -1,8 +1,30 @@
 <%= @period_report.time %>
 
+<% @map = GMap.new("map_div")
+   @map.control_init(:large_map => true,:map_type => true)
+   @map.center_zoom_init([40.4,-3.8],5)
+   @map.overlay_init GMarker.new([35.12878, -110.578],:title => "Hello!")
+   %>
+  
 <ul>
 <% @period_report.sorted_users[0, 10].each do |u| -%>
-<% user = User.find_by_username  u["username"] %>
+<% user = User.find_by_username  u["username"]; %>
   <li><img src="<%= user.profile_image_url%>"/><a href="http://www.twitter.com/<%= u["username"] %>"><%= u["username"] %></a>: <%= u["report"]["mentions"] %> menciones </li>
+<% @map.record_init @map.add_overlay(GMarker.new([35.12878, -110.578],:title => u["username"])) %>
 <% end -%>
 </ul>
+
+<% 
+@period_report.sorted_users[0, 100].each do |u| 
+  user = User.find_by_username  u["username"]; 
+  if !user.profile.blank? && !user.profile["location"].blank?
+    location = Location.locate user.profile["location"]
+    unless location.blank?
+      @map.record_init(@map.add_overlay(GMarker.new(location.latlon,:title => location.name))) 
+    end
+  end
+end %>
+
+<%= GMap.header.html_safe %>
+<%= @map.to_html.html_safe %>
+<%= @map.div(:width => 600,:height => 400).html_safe %>
